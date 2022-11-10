@@ -7,6 +7,7 @@ namespace clHuffmanCode
     public class Encrypter
     {
         public Dictionary<string, int> dic = new();
+        private int paddingOnLastByte = 0;
 
         //count the different characters in a string
         public string CountChars(string str)
@@ -161,6 +162,7 @@ namespace clHuffmanCode
         {
             List<string> tree = new();
             {
+                tree.Add(paddingOnLastByte.ToString());
                 foreach (var item in dict)
                 {
                     tree.Add(item.Key + item.Value);
@@ -192,6 +194,7 @@ namespace clHuffmanCode
             {
                 bytes.Add(Convert.ToByte(s, 2));
             }
+            paddingOnLastByte = 8 - sb.Length % 8;
             return bytes;
         }
 
@@ -203,7 +206,8 @@ namespace clHuffmanCode
         public Dictionary<string, string> ReadTree(string[] tree)
         {
             Dictionary<string, string> dict = new();
-            for (int i = 0; i < tree.Length; i++)
+            paddingOnLastByte = Convert.ToInt32(tree[0]);
+            for (int i = 1; i < tree.Length; i++)
             {
                 if (tree[i] == "")
                 {
@@ -226,7 +230,8 @@ namespace clHuffmanCode
             StringBuilder sb = new();
             foreach (byte b in bytes)
             {
-                sb.Append(Convert.ToString(b, 2).PadLeft(8, '0'));
+                if (b == bytes.Last()) sb.Append(Convert.ToString(b, 2).PadLeft(8 - paddingOnLastByte, '0'));
+                else sb.Append(Convert.ToString(b, 2).PadLeft(8, '0'));
             }
             string tmp = sb.ToString();
             return tmp;

@@ -48,8 +48,8 @@ namespace wfHuffmanCode
                 string input = rtbInput.Text;
                 input = encrypter.CountChars(input);
                 dict = encrypter.CreateCode();
-                tree = encrypter.WriteTree(dict);
                 bytes = encrypter.CreateBinary(input, dict);
+                tree = encrypter.WriteTree(dict);
                 lastAction = 0;
                 rtbInput.Text = Encoding.Latin1.GetString(bytes.ToArray());
             }
